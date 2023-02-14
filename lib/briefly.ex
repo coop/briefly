@@ -5,12 +5,19 @@ defmodule Briefly do
              |> String.split("<!-- MDOC -->")
              |> Enum.fetch!(1)
 
-  use Application
+  use Supervisor
 
-  @doc false
+  def start_link(opts \\ []) do
+    Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
+  end
+
   @impl true
-  def start(_type, _args) do
-    Briefly.Supervisor.start_link()
+  def init(opts) do
+    children = [
+      {Briefly.Entry, opts}
+    ]
+
+    Supervisor.init(children, strategy: :one_for_one)
   end
 
   @type create_opts :: [

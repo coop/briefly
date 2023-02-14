@@ -5,6 +5,12 @@ defmodule Test.Briefly do
   @fixture "content"
   @extname ".tst"
 
+  setup_all do
+    start_supervised!(Briefly)
+
+    :ok
+  end
+
   test "removes the random file on process death" do
     parent = self()
 
